@@ -5,6 +5,7 @@ import { observer } from "mobx-react";
 import { IDialogPropTypes } from "rc-dialog/lib/IDialogPropTypes";
 
 import { ReactComponent as ArrowIcon } from "@src/assets/icons/arrowUp.svg";
+import { ReactComponent as BakoSafeIcon } from "@src/assets/wallets/bako.svg";
 import { ReactComponent as FuelWalletIcon } from "@src/assets/wallets/fuel.svg";
 import { NETWORK } from "@src/blockchain/types";
 import Button from "@src/components/Button";
@@ -34,6 +35,12 @@ const WALLETS: Wallet[] = [
     name: "Fuel Wallet",
     isActive: true,
     icon: FuelWalletIcon,
+    network: NETWORK.FUEL,
+  },
+  {
+    name: "Bako Safe",
+    isActive: true,
+    icon: BakoSafeIcon,
     network: NETWORK.FUEL,
   },
 ];
