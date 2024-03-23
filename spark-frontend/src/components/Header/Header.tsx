@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "@emotion/styled";
+import { useConnectUI, useIsConnected } from "@fuels/react";
 import { observer } from "mobx-react";
 
 import Button from "@components/Button";
@@ -14,7 +15,6 @@ import { NETWORK } from "@src/blockchain/types";
 import { MENU_ITEMS } from "@src/constants";
 import useFlag from "@src/hooks/useFlag";
 import { useMedia } from "@src/hooks/useMedia";
-import ConnectWalletDialog from "@src/screens/ConnectWallet";
 import { media } from "@src/themes/breakpoints";
 import isRoutesEquals from "@src/utils/isRoutesEquals";
 import { useStores } from "@stores";
@@ -31,6 +31,9 @@ interface IProps {}
 
 const Header: React.FC<IProps> = observer(() => {
   const { accountStore, blockchainStore } = useStores();
+
+  const { isConnected } = useIsConnected();
+  const { connect } = useConnectUI();
   const location = useLocation();
   const media = useMedia();
 
@@ -53,8 +56,8 @@ const Header: React.FC<IProps> = observer(() => {
   };
 
   const renderWallet = () => {
-    if (!accountStore.address) {
-      const openActions = bcNetwork?.NETWORK_TYPE === NETWORK.EVM ? () => web3Modal.open() : openConnectDialog;
+    if (!accountStore.address && !isConnected) {
+      const openActions = bcNetwork?.NETWORK_TYPE === NETWORK.EVM ? () => web3Modal.open() : () => connect();
 
       return (
         <WalletContainer>
@@ -165,7 +168,7 @@ const Header: React.FC<IProps> = observer(() => {
         onNetworkSelect={openNetworkSelect}
         onWalletConnect={openConnectDialog}
       />
-      <ConnectWalletDialog visible={isConnectDialogVisible} onClose={closeConnectDialog} />
+      {/* <ConnectWalletDialog visible={isConnectDialogVisible || !isConnected} onClose={closeConnectDialog} /> */}
       <AccountInfoSheet isOpen={isAccountInfoSheetOpen} onClose={closeAccountInfo} />
       <NetworkSelectSheet isOpen={isNetworkSelectOpen} onClose={closeNetworkSelect} />
       <DepositWithdrawModal visible={isDepositWithdrawDialogVisible} onClose={closeDepositWithdrawDialog} />
